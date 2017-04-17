@@ -17,17 +17,16 @@ Role Variables
 
     intellij_version: 2017.1.1
     intellij_edition: community
-    intellij_download_mirror: https://download.jetbrains.com/python/
+    intellij_download_mirror: "https://download.jetbrains.com/idea/"
     intellij_plugin_download_mirror: "https://plugins.jetbrains.com/plugin/download?updateId="
     intellij_plugins: []
     intellij_download_directory: /tmp
     intellij_install_directory: "{{ ansible_env['HOME'] }}/Tools"
 
-    intellij_install_file: "intellij-{{ intellij_edition}}-{{ intellij_version }}.tar.gz"
+    intellij_install_file: "idea{{ intellij_edition_short }}-{{ intellij_version }}.tar.gz"
     intellij_download_url: "{{ intellij_download_mirror }}{{ intellij_install_file }}"
     intellij_location: "{{ intellij_install_directory }}/intellij-{{ intellij_edition }}-{{ intellij_version }}"
     intellij_desktop_file_location: "{{ ansible_env['HOME'] }}/.local/share/applications/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
-
 
 intellij_plugins is a list of names which get appended to intellij_plugin_download_mirror to form a full download  
 
@@ -51,7 +50,7 @@ __Example playbook__
       
 __Exmaple inventory for plugins__
 
-The below IDs have been found by going to https://plugins.jetbrains.com/intellij and searching for the plugin. 
+The below IDs have been found by going to https://plugins.jetbrains.com/ and searching for the plugin. 
 Once found copy the link location for the desired version and use the _updateId=XXXXX_ part at the end        
       
     intellij_plugins:
