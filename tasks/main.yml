@@ -1,0 +1,60 @@
+---
+
+- name: Set facts
+  set_fact:
+    intellij_edition_short: "{{ item.short }}"
+  with_items:
+  - short: IC
+    long: community
+  - short: IU
+    long: ultimate
+  when: intellij_edition == item.long
+
+- name: Create directories for IntelliJ
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+  - "{{ intellij_download_directory }}"
+  - "{{ intellij_install_directory }}"
+
+- name: Download IntelliJ
+  get_url:
+    url: "{{ intellij_download_url}}"
+    dest: "{{ intellij_download_directory }}"
+  register: intellij_installer
+
+- name: Download IntelliJ plugins
+  get_url:
+    url: "{{ intellij_plugin_download_mirror }}{{ item }}"
+    dest: "{{ intellij_download_directory }}"
+  register: intellij_plugins
+  with_items: "{{ intellij_plugins }}"
+
+- name: Install IntelliJ
+  unarchive:
+    src: "{{ intellij_installer.dest }}"
+    dest: "{{ intellij_download_directory }}"
+    list_files: yes
+  register: unarchive_intellij
+
+- name: Find IntelliJ build number
+  set_fact:
+    intellij_buildnumber: "{{ unarchive_intellij.files[0].split('/')[0] }}"
+
+- debug:
+    msg: "Build number: {{ intellij_buildnumber }}"
+
+- name: Move to final location
+  command: mv {{ intellij_download_directory }}/{{ intellij_buildnumber }} {{ intellij_location }}
+
+- name: Install IntelliJ Plugins
+  unarchive:
+    src: "{{ item.dest }}"
+    dest: "{{ intellij_location }}/plugins"
+  with_items: "{{ intellij_plugins.results }}"
+
+- name: Create IntelliJ desktop entry
+  template:
+    src: intellij.desktop.j2
+    dest: "{{ intellij_desktop_file_location }}"
