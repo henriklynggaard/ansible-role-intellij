@@ -25,8 +25,8 @@ Role Variables
 
     intellij_install_file: "idea{{ intellij_edition_short }}-{{ intellij_version }}.tar.gz"
     intellij_download_url: "{{ intellij_download_mirror }}{{ intellij_install_file }}"
-    intellij_location: "{{ intellij_install_directory }}/intellij-{{ intellij_edition }}-{{ intellij_version }}"
-    intellij_desktop_file_location: "{{ ansible_env['HOME'] }}/.local/share/applications/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
+    intellij_desktop_file_directory: "{{ ansible_env['HOME'] }}/.local/share/applications"
+    intellij_desktop_file_location: "{{ intellij_desktop_file_directory }}/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
 
 intellij_plugins is a list of names which get appended to intellij_plugin_download_mirror to form a full download  
 
@@ -77,4 +77,5 @@ MIT
 Change log
 ----------
 
+* 1.1: Create the desktop file directory in case we are the first
 * 1.0: Initial version

@@ -17,6 +17,7 @@
   with_items:
   - "{{ intellij_download_directory }}"
   - "{{ intellij_install_directory }}"
+  - "{{ intellij_desktop_file_directory }}"
 
 - name: Download IntelliJ
   get_url:
