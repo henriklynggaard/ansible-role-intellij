@@ -1,5 +1,11 @@
 ---
 
+- name: install tar on Fedora 24
+  dnf:
+    name: tar
+    state: present
+  when: ansible_distribution == "Fedora" and ansible_distribution_major_version == "24"
+
 - name: Set facts
   set_fact:
     intellij_edition_short: "{{ item.short }}"
@@ -17,13 +23,8 @@
   with_items:
   - "{{ intellij_download_directory }}"
   - "{{ intellij_install_directory }}"
-  - "{{ intellij_desktop_file_directory }}"
+  - "{{ intellij_desktop_file_location | dirname }}"
 
-- name: Download IntelliJ
-  get_url:
-    url: "{{ intellij_download_url}}"
-    dest: "{{ intellij_download_directory }}"
-  register: intellij_installer
 
 - name: Download IntelliJ plugins
   get_url:
@@ -34,20 +35,31 @@
 
 - name: Install IntelliJ
   unarchive:
-    src: "{{ intellij_installer.dest }}"
+    src: "{{ intellij_download_url}}"
     dest: "{{ intellij_download_directory }}"
+    copy: no
     list_files: yes
+    creates: "{{ intellij_location }}/bin/idea.sh"
   register: unarchive_intellij
 
 - name: Find IntelliJ build number
   set_fact:
     intellij_buildnumber: "{{ unarchive_intellij.files[0].split('/')[0] }}"
+  when: unarchive_intellij|changed
+  tags:
+    - skip_ansible_lint
 
 - debug:
     msg: "Build number: {{ intellij_buildnumber }}"
+  when: unarchive_intellij|changed
+  tags:
+    - skip_ansible_lint
 
 - name: Move to final location
   command: mv {{ intellij_download_directory }}/{{ intellij_buildnumber }} {{ intellij_location }}
+  when: unarchive_intellij|changed
+  tags:
+    - skip_ansible_lint
 
 - name: Install IntelliJ Plugins
   unarchive:
