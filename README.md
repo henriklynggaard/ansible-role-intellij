@@ -2,7 +2,7 @@ IntelliJ
 =========
 
 This role installs intellij and configured plugins. It has been tested on Linux Mint 18 but should wokr on most 
-distributions. By default it installs IntelliJ community edition 2017.1.1 and no additional plugins
+distributions. By default it installs IntelliJ community edition 2017.2 and no additional plugins
 
 By default intellij is installed under the user's home directory and _become_ is not needed.
 
@@ -15,7 +15,7 @@ None
 Role Variables
 --------------
 
-    intellij_version: 2017.1.1
+    intellij_version: 2017.2
     intellij_edition: community
     intellij_download_mirror: "https://download.jetbrains.com/idea/"
     intellij_plugin_download_mirror: "https://plugins.jetbrains.com/plugin/download?updateId="
