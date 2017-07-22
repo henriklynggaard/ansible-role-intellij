@@ -6,9 +6,10 @@ intellij_download_mirror: "https://download.jetbrains.com/idea/"
 intellij_plugin_download_mirror: "https://plugins.jetbrains.com/plugin/download?updateId="
 intellij_plugins: []
 intellij_download_directory: /tmp
-intellij_install_directory: "{{ ansible_env['HOME'] }}/Tools"
+intellij_user_dir: "~{{ (intellij_install_user is defined) | ternary(intellij_install_user, ansible_user_id) }}"
+intellij_install_directory: "{{ intellij_user_dir | expanduser }}/Tools"
 
 intellij_install_file: "idea{{ intellij_edition_short }}-{{ intellij_version }}.tar.gz"
 intellij_download_url: "{{ intellij_download_mirror }}{{ intellij_install_file }}"
 intellij_location: "{{ intellij_install_directory }}/intellij-{{ intellij_edition }}-{{ intellij_version }}"
-intellij_desktop_file_location: "{{ ansible_env['HOME'] }}/.local/share/applications/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
+intellij_desktop_file_location: "{{ intellij_user_dir | expanduser }}/.local/share/applications/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
