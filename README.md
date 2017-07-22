@@ -21,15 +21,16 @@ Role Variables
     intellij_plugin_download_mirror: "https://plugins.jetbrains.com/plugin/download?updateId="
     intellij_plugins: []
     intellij_download_directory: /tmp
-    intellij_install_directory: "{{ ansible_env['HOME'] }}/Tools"
+    intellij_user_dir: "~{{ (intellij_install_user is defined) | ternary(intellij_install_user, ansible_user_id) }}"
+    intellij_install_directory: "{{ intellij_user_dir | expanduser }}/Tools"
+    intellij_install_user: <undefined>
 
     intellij_install_file: "idea{{ intellij_edition_short }}-{{ intellij_version }}.tar.gz"
     intellij_download_url: "{{ intellij_download_mirror }}{{ intellij_install_file }}"
-    intellij_desktop_file_directory: "{{ ansible_env['HOME'] }}/.local/share/applications"
-    intellij_desktop_file_location: "{{ intellij_desktop_file_directory }}/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
+    intellij_desktop_file_location: "{{ intellij_user_dir | expanduser }}/.local/share/applications/intellij-{{ intellij_edition }}-{{ intellij_version }}.desktop"
 
-intellij_plugins is a list of names which get appended to intellij_plugin_download_mirror to form a full download  
-
+* intellij_plugins is a list of names which get appended to intellij_plugin_download_mirror to form a full download  
+* Defining intellij_install_user allows the role to install under a different user, however become is required 
 
 Dependencies
 ------------
@@ -77,6 +78,7 @@ MIT
 Change log
 ----------
 
+* 1.4: Allow installation under another user
 * 1.3: Update to IntelliJ 2017.2
 * 1.2: Added molecule tests
 * 1.1: Create the desktop file directory in case we are the first

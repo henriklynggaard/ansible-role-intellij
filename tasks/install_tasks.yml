@@ -30,7 +30,7 @@
   get_url:
     url: "{{ intellij_plugin_download_mirror }}{{ item }}"
     dest: "{{ intellij_download_directory }}"
-  register: intellij_plugins
+  register: intellij_plugins_downloaded
   with_items: "{{ intellij_plugins }}"
 
 - name: Install IntelliJ
@@ -65,7 +65,7 @@
   unarchive:
     src: "{{ item.dest }}"
     dest: "{{ intellij_location }}/plugins"
-  with_items: "{{ intellij_plugins.results }}"
+  with_items: "{{ intellij_plugins_downloaded.results }}"
 
 - name: Create IntelliJ desktop entry
   template:
