@@ -77,6 +77,7 @@ MIT
 Change log
 ----------
 
-* 1.2: Update to IntelliJ 2017.2
+* 1.3: Update to IntelliJ 2017.2
+* 1.2: Added molecule tests
 * 1.1: Create the desktop file directory in case we are the first
 * 1.0: Initial version
